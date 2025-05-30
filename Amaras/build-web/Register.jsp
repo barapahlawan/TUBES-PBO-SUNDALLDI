@@ -1,16 +1,10 @@
-<%-- 
-    Document   : Register
-    Created on : 22 May 2025, 12.22.19
-    Author     : 103012330227_Bara Pahlawan
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Daftar | Yayasan Amaras</title>
+  <title>Register Yayasan Amaras</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     * {
@@ -22,7 +16,7 @@
 
     body, html {
       height: 100%;
-      background-color: #f4f4f4;
+      background: #f2f2f2;
     }
 
     .container {
@@ -41,6 +35,7 @@
       position: relative;
       overflow: hidden;
     }
+
     .left::before {
       content: "";
       background: url('logo.png') no-repeat center;
@@ -55,19 +50,21 @@
       z-index: 0;
     }
 
+    .left h1, .left p {
+      position: relative;
+      z-index: 1;
+    }
+
     .left h1 {
       font-size: 36px;
       font-weight: 700;
       margin-bottom: 16px;
-      line-height: 1.3;
-      z-index: 1;
     }
 
     .left p {
       font-size: 16px;
       max-width: 400px;
       line-height: 1.6;
-      z-index: 1;
     }
 
     .right {
@@ -90,7 +87,7 @@
       color: #000;
     }
 
-    h2 {
+    .right h2 {
       font-size: 24px;
       font-weight: 700;
       margin-bottom: 24px;
@@ -106,7 +103,9 @@
       margin-bottom: 6px;
     }
 
-    .form-group input {
+    .form-group input[type="text"],
+    .form-group input[type="email"],
+    .form-group input[type="password"] {
       width: 100%;
       padding: 12px 16px;
       border-radius: 12px;
@@ -142,6 +141,13 @@
       text-decoration: underline;
     }
 
+    .error-message {
+      color: red;
+      font-size: 14px;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
     @media (max-width: 768px) {
       .container {
         flex-direction: column;
@@ -152,22 +158,31 @@
         width: 100%;
         padding: 40px 30px;
       }
+
+      .left::before {
+        background-size: 80%;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="left">
-      <h1>Selamat Datang di Yayasan<br>Amaras Harapan Bangsa</h1>
-      <p>Yayasan Amaras Harapan Bangsa hadir untuk membangun masyarakat melalui Posyandu, KBM, dan Sekolah Lansia.</p>
+      <h1>Bergabunglah dengan Yayasan<br>Amaras Harapan Bangsa</h1>
+      <p>Isi data lengkap Anda untuk menjadi bagian dari komunitas kami.</p>
     </div>
     <div class="right">
-      <a href="index.jsp" class="close-button">&times;</a>
-      <h2>Daftar</h2>
-      <form>
+      <a href="dashboard.jsp" class="close-button">&times;</a>
+      <h2>Daftar Akun</h2>
+
+      <% if ("email-exists".equals(request.getParameter("error"))) { %>
+        <div class="error-message">Email anda sudah terdaftar, silakan login.</div>
+      <% } %>
+
+      <form action="RegisterServlet" method="post">
         <div class="form-group">
-          <label for="nama">Nama Lengkap</label>
-          <input type="text" id="nama" name="nama" required>
+          <label for="fullname">Nama Lengkap</label>
+          <input type="text" id="fullname" name="fullname" required>
         </div>
         <div class="form-group">
           <label for="email">Email</label>
@@ -176,10 +191,6 @@
         <div class="form-group">
           <label for="password">Kata Sandi</label>
           <input type="password" id="password" name="password" required>
-        </div>
-        <div class="form-group">
-          <label for="confirm-password">Konfirmasi Kata Sandi</label>
-          <input type="password" id="confirm-password" name="confirm-password" required>
         </div>
         <button class="register-btn" type="submit">Daftar</button>
         <div class="login-link">
