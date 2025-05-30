@@ -1,9 +1,3 @@
-<%-- 
-    Document   : Login
-    Created on : 22 May 2025, 12.21.53
-    Author     : 103012330227_Bara Pahlawan
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="id">
@@ -162,6 +156,13 @@
       text-decoration: underline;
     }
 
+    .error-message {
+      color: red;
+      font-size: 14px;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
     @media (max-width: 768px) {
       .container {
         flex-direction: column;
@@ -186,22 +187,34 @@
       <p>Yayasan Amaras Harapan Bangsa hadir untuk membangun masyarakat melalui Posyandu, KBM, dan Sekolah Lansia.</p>
     </div>
     <div class="right">
-      <a href="index.jsp" class="close-button">&times;</a>
+      <a href="dashboard.jsp" class="close-button">&times;</a>
       <h2>Masuk</h2>
-      <form>
+
+      <% 
+        String error = request.getParameter("error");
+        if ("emailNotRegistered".equals(error)) {
+      %>
+        <div class="error-message">Email anda belum terdaftar, silakan daftar terlebih dahulu!</div>
+      <% } else if ("wrongPassword".equals(error)) { %>
+        <div class="error-message">Password salah. Silakan coba lagi.</div>
+      <% } else if ("exception".equals(error)) { %>
+        <div class="error-message">Terjadi kesalahan server. Silakan coba beberapa saat lagi.</div>
+      <% } %>
+
+      <form action="LoginServlet" method="post">
         <div class="form-group">
           <label for="email">Email</label>
-          <input type="text" id="email" name="email">
+          <input type="text" id="email" name="email" required>
         </div>
         <div class="form-group">
           <label for="password">Kata Sandi</label>
-          <input type="password" id="password" name="password">
+          <input type="password" id="password" name="password" required>
         </div>
         <div class="checkbox-group">
           <input type="checkbox" id="remember" name="remember">
           <label for="remember">Ingatkan saya</label>
         </div>
-          <button class="login-btn" type="submit">Masuk</button>
+        <button class="login-btn" type="submit">Masuk</button>
         <div class="register-link">
           Belum punya akun? <a href="Register.jsp">Daftar</a>
         </div>
