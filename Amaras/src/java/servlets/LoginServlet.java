@@ -1,4 +1,4 @@
-package servlets; // Ganti sesuai dengan package-mu
+package servlets;
 
 import java.io.IOException;
 import java.sql.*;
@@ -18,7 +18,7 @@ public class LoginServlet extends HttpServlet {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection conn = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/amaras", "root", ""); // Ganti sesuai database Anda
+                "jdbc:mysql://localhost:3306/amaras", "root", "");
 
             // Cek apakah email ada
             String checkEmailSql = "SELECT * FROM pengguna WHERE email=?";
@@ -38,13 +38,22 @@ public class LoginServlet extends HttpServlet {
                 ResultSet loginRs = checkPasswordStmt.executeQuery();
 
                 if (loginRs.next()) {
-                    // Login berhasil
+                    String fullname = loginRs.getString("fullname");
+                    String role = loginRs.getString("role");
+
                     HttpSession session = request.getSession();
-                    session.setAttribute("fullname", loginRs.getString("fullname"));
+                    session.setAttribute("fullname", fullname);
                     session.setAttribute("email", email);
-                    response.sendRedirect("dashboard.jsp");
+                    session.setAttribute("role", role);
+
+                    
+                    if ("admin".equalsIgnoreCase(role)) {
+                        response.sendRedirect("dashboardAdmin.jsp"); 
+                    } else {
+                        response.sendRedirect("dashboard.jsp");
+                    }
                 } else {
-                    // Password salah
+
                     response.sendRedirect("Login.jsp?error=wrongPassword");
                 }
 
