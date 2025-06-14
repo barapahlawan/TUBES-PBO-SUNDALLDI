@@ -1,11 +1,13 @@
 <%-- 
-    Document   : index
-    Created on : 22 May 2025, 12.18.57
-    Author     : Nabilah Putri Desky
+    Document   : TentangKami
+    Created on : 22 May 2025, 12.29.06
+    Author     : ACER
 --%>
 
+<%@ page import="java.sql.*" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
+
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -123,20 +125,21 @@
         }
 
         .hero-image {
-            width: 40%;
-            display: flex;
+            width: 100%;
             justify-content: center;
+            align-items: center;
         }
 
         .hero-image img {
             width: 80%;
             max-width: 300px;
-            opacity: 0.7;
+            opacity: 1;
         }
 
         /* Services Section */
         .services {
             padding: 2rem 5%;
+            
         }
 
         .services-header {
@@ -170,17 +173,27 @@
 
         .services-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(3, 7fr);
             gap: 1.5rem;
+            margin-bottom: 2rem;
         }
 
         .service-card {
             background-color: white;
-            border-radius: 10px;
+            border-radius: 12px;
             padding: 2rem;
-            text-align: center;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
+            width: 400%;
+            max-width: 1220px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        service-cards {
+            background-color: white;
+            border-radius: 100px;
+            padding: 10rem;
+            width: 500%;
+            max-width: 1000px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         .service-card:hover {
@@ -203,6 +216,8 @@
         .service-description {
             color: #666;
             font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            text-align: justify;
         }
 
         /* Footer */
@@ -236,7 +251,7 @@
         @media (max-width: 768px) {
             .hero {
                 flex-direction: column;
-                padding: 2rem 5%;
+                padding: 7rem 5%;
             }
             
             .hero-content, .hero-image {
@@ -245,20 +260,22 @@
             }
             
             .hero-image {
-                margin-top: 2rem;
+                margin-top: 20rem;
             }
             
             .services-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: 7fr;
             }
             
             footer {
-                flex-direction: column;
+                flex-direction:column;
                 text-align: center;
                 gap: 1rem;
             }
-        }
-    </style>
+            
+
+                    
+      </style>
 </head>
 <body>
     <!-- Header with Logo and Navigation -->
@@ -275,77 +292,61 @@
         </div>
         <nav>
             <ul>
-                <li><a href="TentangKami.jsp">Tentang Kami</a></li>
-                <li><a href = "Login.jsp">Masuk</a></li>
-                
+                <li><a href="dashboard.jsp">Beranda</a></li>
+                <li><a href="Login.jsp">Keluar</a></li>
             </ul>
         </nav>
     </header>
-
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-content">
-            <h1>Pelayanan Sosial Berbasis Cinta dan Ilmu</h1>
-            <p>Yayasan Amaras Harapan Bangsa hadir untuk membangun masyarakat melalui Posyandu, KBM, dan Sekolah Lansia.</p>
-            <a href="Donasi.jsp" class="donate-btn" id="donateBtn">Donasi Sekarang!</a>
-        </div>
-        <div class="hero-image">
-            <!-- Using image file for logo in hero section -->
-            <img src="logo.png" alt="Yayasan Amaras Logo" style="width: 80%; max-width: 300px; opacity: 0.7;">
-        </div>
-    </section>
+<%
+    String deskripsi = "", visimisi = "", kontak = "", alamat = "";
+    Connection conn = null;
+    try {
+        Class.forName("com.mysql.cj.jdbc.Driver"); // atau com.mysql.jdbc.Driver jika versi lama
+        conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/amaras", "root", "");
+        
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT * FROM tentang_kami WHERE id = 1");
+        if (rs.next()) {
+            deskripsi = rs.getString("deskripsi") != null ? rs.getString("deskripsi") : "";
+            visimisi = rs.getString("visimisi") != null ? rs.getString("visimisi") : "";
+            kontak = rs.getString("kontak") != null ? rs.getString("kontak") : "";
+            alamat = rs.getString("alamat") != null ? rs.getString("alamat") : "";
+        }
+        rs.close();
+        stmt.close();
+        conn.close(); 
+    } catch (Exception e) {
+        out.println("<p style='color:red;'>Gagal mengambil data: " + e.getMessage() + "</p>");
+    }
+    %>
+    
 
     <!-- Services Section -->
-    <section class="services">
-        <div class="services-header">
-            <h2 class="services-title">Layanan Kami</h2>
-            <div class="donation-counter">
-                <h2 class="services-title">Total Donasi: </h2>
-                <span class="donation-amount">Rp.0</span>
-            </div>
-        </div>
+    <section class="services">       
         <div class="services-grid">
             <div class="service-card">
-                <div class="service-icon">
-                    <svg width="60" height="60" viewBox="0 0 100 100" fill="#1a56a2">
-                        <path d="M35,40 C35,25 65,25 65,40 C65,55 80,60 80,75 C80,90 20,90 20,75 C20,60 35,55 35,40" stroke="#1a56a2" stroke-width="5" fill="none"></path>
-                        <circle cx="50" cy="25" r="10" fill="#1a56a2"></circle>
-                    </svg>
+                <div class="hero-image">
+            <!-- Using image file for logo in hero section -->
+            <center><img src="logo.png" alt="Yayasan Amaras Logo" style="width: 150%; max-width: 300px; opacity: 1;"></center>
                 </div>
-                <h3 class="service-title">Posyandu</h3>
-                <p class="service-description">Pelayanan Ibu dan Anak</p>
-            </div>
-            <div class="service-card">
-                <div class="service-icon">
-                    <svg width="60" height="60" viewBox="0 0 100 100" fill="#1a56a2">
-                        <rect x="20" y="20" width="60" height="60" rx="5" stroke="#1a56a2" stroke-width="5" fill="none"></rect>
-                        <line x1="20" y1="40" x2="80" y2="40" stroke="#1a56a2" stroke-width="5"></line>
-                        <line x1="50" y1="20" x2="50" y2="80" stroke="#1a56a2" stroke-width="5"></line>
-                    </svg>
-                </div>
-                <h3 class="service-title">KBM</h3>
-                <p class="service-description">Kelompok Belajar Masyarakat</p>
-            </div>
-            <div class="service-card">
-                <div class="service-icon">
-                    <svg width="60" height="60" viewBox="0 0 100 100" fill="#1a56a2">
-                        <circle cx="50" cy="40" r="20" stroke="#1a56a2" stroke-width="5" fill="none"></circle>
-                        <path d="M30,35 L35,45 M65,45 L70,35" stroke="#1a56a2" stroke-width="3"></path>
-                        <path d="M40,50 C45,55 55,55 60,50" stroke="#1a56a2" stroke-width="3" fill="none"></path>
-                        <path d="M20,80 C20,65 80,65 80,80" stroke="#1a56a2" stroke-width="5" fill="none"></path>
-                    </svg>
-                </div>
-                <h3 class="service-title">Sekolah Lansia</h3>
-                <p class="service-description">Edukasi dan kegiatan aktif untuk Lansia</p>
+                <h3 class="service-title">Tentang Kami</h3>
+                <p class="service-description"><%= deskripsi.replaceAll("\\n", "<br>") %></p>
+                
+                <h3 class="service-title">Visi Misi</h3>
+                <p class="service-description"><%= visimisi.replaceAll("\\n", "<br>") %></p>
+                
+                <h4 class="service-title">Kontak</h4>
+                <p class="service-description"><%= kontak %></p>
+
+                <h4 class="service-title">Alamat</h4>
+                <p class="service-description"><%= alamat %></p>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer>
-        <div class="register-text">Daftarkan Diri Anda!</div>
-        <a href="Register.jsp" class="register-btn">Daftar</a>
-    </footer>
+    
+    
+    
 
     <script>
         // JavaScript untuk menangani klik tombol donasi
@@ -357,7 +358,7 @@
         // Animasi counter donasi
         const donationAmount = document.querySelector('.donation-amount');
         const targetAmount = 12250000;
-        let currentAmount = 12000000;
+        let currentAmount = 0;
         const duration = 2000; // ms
         const frameRate = 20; // fps
         const increment = targetAmount / (duration / 1000 * frameRate);
